@@ -1,5 +1,12 @@
 .main-header {
-    display: flex;
+
+    display: grid;
+    grid-template-areas: "logo search-bar search-bar ."
+                     ". dropdown-container nav-links nav-user";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 40px 28px;
+    grid-column-gap: 50px;
+    grid-row-gap: 10px;
     justify-content: space-between;
     align-items: center;
     background-color: var(--six-color);
@@ -10,8 +17,31 @@
     margin-bottom: 2rem;
     position: sticky;
   }
+
+  .nav-user {
+    grid-area: nav-user;
+  }
+  .nav-links {    
+    grid-area: nav-links;
+  }
+
+  .nav-user, .nav-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    
+  }
+  .search-bar {
+    grid-area: search-bar;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
   
   .logo {
+    grid-area: logo;
     font-size: 1.8rem;
     font-weight: bold;
     color: var(--primary-color);
@@ -25,7 +55,7 @@
     transition: color 0.3s ease;
   }
   
-  .nav-links a:hover {
+  .nav-links a:hover, .nav-users a:hover {
     color: var(--secondary-color);
   }
   
@@ -43,3 +73,47 @@
   .login-button:hover {
     background-color: var(--quaternary-color);
   }
+
+  .dropdown-container {
+    grid-area: dropdown-container;
+    position: relative; /* Para posicionar el dropdown-list respecto a esto */
+    display: inline-block;
+  }
+  
+  .dropdown-toggle {
+    text-decoration: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  /* Dropdown flotante */
+  .dropdown-list {
+    position: absolute;
+    top: 100%; /* justo debajo del botón */
+    left: 0;
+    background-color: var(--tertiary-color);
+    border-radius: 5px;
+    border-top: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 999; /* por encima del header */
+    width: 150px;
+    margin-top: 2px;
+  }
+  
+  .dropdown-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dropdown-list li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown-list li:hover {
+    background-color: #f0f0f0;
+  }
+  

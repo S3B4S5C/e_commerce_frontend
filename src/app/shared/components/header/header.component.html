@@ -1,20 +1,31 @@
 <header class="main-header">
-    <div class="logo">MiTienda</div>
-  
-    <select #selectElement class="category-filter" (change)="filtrarPorCategoria(selectElement.value)">
-      <option value="">Todas las categorías</option>
-      <option *ngFor="let categoria of categoryProducts" [value]="categoria.id">
-        {{ categoria }}
-      </option>
-    </select>
-   
-    <nav class="nav-links">
-      <a routerLink="/">Inicio</a>
-      <a routerLink="/productos">Productos</a>
-      <a routerLink="/contacto">Contacto</a>
-    </nav>
-  
-    <button class="login-button" routerLink="/login">Iniciar sesión</button>
-
-  </header>
-  
+  <div class="logo">MiTienda</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Buscar productos..." />
+    <button type="button">Buscar</button>
+  </div>
+  <div class="dropdown-container">
+    <a
+      href="#"
+      (click)="toggleMenu(); $event.preventDefault()"
+      class="dropdown-toggle"
+    >
+      Categories ▼
+    </a>
+    <div *ngIf="isOpen" class="dropdown-list">
+      <ul *ngFor="let category of categoryProducts">
+        <li (click)="filtrarPorCategoria(category)">{{ category }}</li>
+      </ul>
+    </div>
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/">Inicio</a>
+    <a routerLink="/productos">Productos</a>
+    <a routerLink="/contacto">Contacto</a>
+  </nav>
+  <nav class="nav-user">
+    <a routerLink="/login">Sign in</a>
+    <a routerLink="/register">Sign up</a>
+    <a routerLink="/contacto">My orders</a>
+  </nav>
+</header>

@@ -18,4 +18,9 @@ export class ProductsService {
   getCategories(): any {
     return this.httpClient.get(this.CATEGORIES_URL);
   }
+  
+  getRecommendedProducts(): any {
+    return this.httpClient.get(`${Globals.API_URL}/products/recommended`);
+  }
+  
 }

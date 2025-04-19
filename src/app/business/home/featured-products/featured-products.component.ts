@@ -15,9 +15,8 @@ export class FeaturedProductsComponent implements OnInit{
   featuredProducts: any[] = [];
   
   ngOnInit() {
-    this.productsService.getProducts().subscribe((data: any) => {
-      console.log(data);
-      this.featuredProducts = data;
+    this.productsService.getRecommendedProducts().subscribe((data: any) => {
+      this.featuredProducts = data.slice(0, 5);
     });
   }
 }

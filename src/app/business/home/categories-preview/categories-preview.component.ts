@@ -15,10 +15,7 @@ export class CategoriesPreviewComponent {
 
   ngOnInit() {
     this.productsService.getCategories().subscribe((data: any) => {
-      console.log(data);
-      this.categories = data.categories.slice(0, 8); // Get the first 5 categories
-      console.log('hola')
-      console.log(this.categories);
+      this.categories = data.categories.slice(0, 8);
     });
   }
 }

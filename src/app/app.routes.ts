@@ -14,6 +14,11 @@ export const routes: Routes = [
     {
         path: 'register',
         loadComponent: () => import('./business/auth/register/register.component')
+    },
+    {
+        path: 'products',
+        loadComponent: () => import('./business/auth/login/login.component'),
     }
+
 
 ];
