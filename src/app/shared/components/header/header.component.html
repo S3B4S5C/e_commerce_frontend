@@ -1,6 +1,13 @@
 <header class="main-header">
     <div class="logo">MiTienda</div>
   
+    <select #selectElement class="category-filter" (change)="filtrarPorCategoria(selectElement.value)">
+      <option value="">Todas las categorías</option>
+      <option *ngFor="let categoria of categoryProducts" [value]="categoria.id">
+        {{ categoria }}
+      </option>
+    </select>
+   
     <nav class="nav-links">
       <a routerLink="/">Inicio</a>
       <a routerLink="/productos">Productos</a>
@@ -8,5 +15,6 @@
     </nav>
   
     <button class="login-button" routerLink="/login">Iniciar sesión</button>
+
   </header>
   

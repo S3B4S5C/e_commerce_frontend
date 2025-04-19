@@ -8,23 +8,14 @@ import { tap } from 'rxjs';
 export class ProductsService {
   private PRODUCTS_URL = `${Globals.API_URL}/products/randomproducts`;
   private CATEGORIES_URL = `${Globals.API_URL}/products/categories`;
+
   constructor(private httpClient: HttpClient) {}
 
   getProducts(): any {
-    return this.httpClient.get(this.PRODUCTS_URL).pipe(
-      tap((response: any) => {
-        const toke = response;
-        console.log(toke);
-      })
-    );
+    return this.httpClient.get(this.PRODUCTS_URL);
   }
 
   getCategories(): any {
-    return this.httpClient.get(this.CATEGORIES_URL).pipe(
-      tap((response: any) => {
-        const toke = response;
-        console.log(toke);
-      })
-    );
+    return this.httpClient.get(this.CATEGORIES_URL);
   }
 }
