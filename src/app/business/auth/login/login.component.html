@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>Welcome! Please log in to your account</h1>
+  <div class="login-form">
+    <form (submit)="login($event)">
+        <label for="login-email">Email:</label>
+        <input
+          [(ngModel)]="email"
+          name="email"
+          type="email"
+          id="login-email"
+          placeholder="Enter your email"
+          required
+        />
+        <label for="login-password">Password:</label>
+        <input
+          [(ngModel)]="password"
+          name="password"
+          type="password"
+          id="login-password"
+          placeholder="Enter your password"
+          required
+        />
+      <button type="submit">Login</button>
+    </form>
+    <h5>Don't have an account?</h5>
+    <a routerLink="/register">Register</a>
+  </div>
+</div>

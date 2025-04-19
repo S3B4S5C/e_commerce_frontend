@@ -1,0 +1,36 @@
+.categories-preview {
+    padding: 2rem;
+    background-color: white;
+    text-align: center;
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: 1rem;
+  }
+  
+  .categories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .category-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 180px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .category-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .category-card img {
+    width: 100%;
+    border-radius: 0.5rem;
+  }
+  

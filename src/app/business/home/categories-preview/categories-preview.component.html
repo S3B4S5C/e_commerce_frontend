@@ -1,0 +1,13 @@
+<section class="categories-preview">
+    <h2>Categorías</h2>
+    <div class="categories-grid">
+      <div class="category-card" *ngFor="let category of categories">
+        <span class="material-symbols-outlined">
+          category
+          </span>
+        <!-- <img [src]="category.imageUrl" alt="{{ category.name }}" /> -->
+        <h4>{{ category }}</h4>
+      </div>
+    </div>
+  </section>
+  

@@ -1,0 +1,89 @@
+<div class="container">
+  <h1>Create Your Account and Start Shopping with Us Today!</h1>
+  <div class="register-form">
+    <form (ngSubmit)="register($event)">
+      <label for="register-name">Name:</label>
+      <input
+        [(ngModel)]="name"
+        name="name"
+        type="text"
+        id="register-name"
+        placeholder="Enter your name"
+        required
+      />
+
+      <label for="register-email">Email:</label>
+      <input
+        [(ngModel)]="email"
+        name="email"
+        type="email"
+        id="register-email"
+        placeholder="Enter your email"
+        required
+      />
+
+      <div class="group-container">
+        <div>
+          <label for="register-password">Password:</label>
+          <input
+            [(ngModel)]="password"
+            name="password"
+            type="password"
+            id="register-password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <div>
+          <label for="confirm-password">Confirm password:</label>
+          <input
+            [(ngModel)]="confirmPassword"
+            name="confirm-password"
+            type="password"
+            id="confirm-password"
+            placeholder="Confirm your password"
+            required
+          />
+        </div>
+      </div>
+      <div class="group-container">
+        <div>
+          <label for="register-cellphone">Cellphone:</label>
+          <input
+            [(ngModel)]="cellphone"
+            name="cellphone"
+            type="text"
+            id="register-cellphone"
+            placeholder="Enter your cellphone"
+            required
+          />
+        </div>
+        <div>
+          <label for="register-birth-date">Birth date:</label>
+          <input
+            [(ngModel)]="birthdate"
+            name="birth-date"
+            type="date"
+            id="register-birth-date"
+            required
+          />
+        </div>
+        <div>
+          <label for="register-gender">Gender:</label>
+          <select
+            [(ngModel)]="gender"
+            name="gender"
+            id="register-gender"
+            required
+          >
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+    <h5>Already have an account?</h5>
+    <a routerLink="/login">Login</a>
+  </div>
+</div>

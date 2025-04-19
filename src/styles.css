@@ -1,1 +1,118 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --primary-color: #e6e9e9;
+  --secondary-color: #d6e6f2;
+  --quinternary-color: #b9d7ea;
+  --six-color: #769fcd;
+  --tertiary-color: #7c98b3ff;
+  --quaternary-color: #637081ff;
+
+  background-color: var(--primary-color);
+
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+button {
+  background-color: var(--secondary-color);
+  color: var(--quaternary-color);
+  border-radius: 5px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 19px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: var(--tertiary-color);
+  color: var(--secondary-color);
+}
+button:active {
+  background-color: var(--quaternary-color);
+  color: var(--secondary-color);
+}
+
+button:disabled {
+  background-color: var(--quaternary-color);
+  color: var(--secondary-color);
+  cursor: not-allowed;
+}
+
+input {
+  background-color: var(--primary-color);
+  color: var(--quaternary-color);
+  border-radius: 5px;
+  border: 1px solid var(--quaternary-color);
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+select {
+  background-color: var(--primary-color);
+  color: var(--quaternary-color);
+  border-radius: 5px;
+  border: 1px solid var(--quaternary-color);
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--tertiary-color);
+}
+
+input::placeholder {
+  color: var(--quaternary-color);
+}
+.input-container {
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--quaternary-color);
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+main {
+  flex-grow: 1;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+  font-size: 80px;
+}
