@@ -1,0 +1,41 @@
+<div class="products-page">
+  <aside class="filters-sidebar">
+    <h3>Filtros</h3>
+    <div class="filter-group">
+        <label class="filter-option">
+            <span>TVs</span>
+            <input type="checkbox" />
+            <span class="material-symbols-outlined check"></span>
+          </label>
+      <label class="filter-option">
+        <span>Laptops</span>
+        <input type="checkbox" />
+        <span class="material-symbols-outlined check"></span>
+      </label>
+      <label class="filter-option">
+        <span>Laptops</span>
+        <input type="checkbox" />
+        <span class="material-symbols-outlined check"></span>
+      </label>
+    </div>
+  </aside>
+
+  <section class="products-container">
+    <h1>Results for {{ searchQuery }}</h1>
+    <div class="products-grid">
+      <app-product-card
+        *ngFor="let product of paginatedResults"
+        [product]="product"
+      ></app-product-card>
+    </div>
+    <div class="pagination-controls">
+      <button
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        [class.active]="currentPage === i + 1"
+        (click)="changePage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </div>
+  </section>
+  
+</div>

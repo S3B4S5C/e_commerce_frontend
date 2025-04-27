@@ -5,7 +5,6 @@ export const routes: Routes = [
     {
         path: '',
         loadComponent: () => import('./business/home/home.component'),
-        canActivate: [authGuard]
     },
     {
         path: 'login',
@@ -17,7 +16,36 @@ export const routes: Routes = [
     },
     {
         path: 'products',
-        loadComponent: () => import('./business/auth/login/login.component'),
+        loadComponent: () => import('./business/products/products.component'),
+    },
+    {
+        path: 'product/:id',
+        loadComponent: () => import('./business/products/product-information/product-information.component'),
+    },
+    {
+        path: 'cart',
+        loadComponent: () => import('./business/cart/cart.component'),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'checkout',
+        loadComponent: () => import('./business/orders/orders.component'),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'order-success',
+        loadComponent: () => import('./business/orders/order-succes/order-succes.component'),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'orders',
+        loadComponent: () => import('./business/orders/show-orders/show-orders.component'),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'admin',
+        loadComponent: () => import('./business/admin/admin.component'),
+        canActivate: [authGuard]
     }
 
 

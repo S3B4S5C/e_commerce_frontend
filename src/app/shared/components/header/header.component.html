@@ -1,31 +1,54 @@
-<header class="main-header">
-  <div class="logo">MiTienda</div>
+<header [ngClass]="{ 'main-header': true, hidden: headerOculto }">
+  <div routerLink="/" class="logo">
+    <span class="material-symbols-outlined"> shopping_bag </span>MiTienda
+  </div>
   <div class="search-bar">
-    <input type="text" placeholder="Buscar productos..." />
-    <button type="button">Buscar</button>
-  </div>
-  <div class="dropdown-container">
-    <a
-      href="#"
-      (click)="toggleMenu(); $event.preventDefault()"
-      class="dropdown-toggle"
-    >
-      Categories ▼
-    </a>
-    <div *ngIf="isOpen" class="dropdown-list">
-      <ul *ngFor="let category of categoryProducts">
-        <li (click)="filtrarPorCategoria(category)">{{ category }}</li>
-      </ul>
+    <input
+      type="text"
+      placeholder="Buscar productos..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearchChange()"
+    />
+    <div class="dropdown-container">
+      <a
+        href="#"
+        (click)="toggleMenu(); $event.preventDefault()"
+        class="dropdown-toggle"
+      >
+        Categorias ▼
+      </a>
+      <div *ngIf="isOpen" class="dropdown-list">
+        <ul *ngFor="let category of categoryProducts">
+          <li (click)="filtrarPorCategoria(category)">{{ category }}</li>
+        </ul>
+      </div>
     </div>
+    <button type="button" (click)="onSearch()">Buscar</button>
   </div>
-  <nav class="nav-links">
-    <a routerLink="/">Inicio</a>
-    <a routerLink="/productos">Productos</a>
-    <a routerLink="/contacto">Contacto</a>
-  </nav>
   <nav class="nav-user">
-    <a routerLink="/login">Sign in</a>
-    <a routerLink="/register">Sign up</a>
-    <a routerLink="/contacto">My orders</a>
+    <div class="user-account">
+      <a (click)="conditionalButton(); $event.preventDefault()" href="#">
+        <span class="material-symbols-outlined">account_circle</span>
+        {{ isLoggedIn ? "Logout" : "Sign in" }}
+      </a>
+    </div>
+    <div class="user-cart">
+      <a routerLink="/cart">
+        <span class="material-symbols-outlined">shopping_cart</span>
+        My cart
+      </a>
+    </div>
+    <div class="user-orders">
+      <a routerLink="/orders">
+        <span class="material-symbols-outlined">receipt_long</span>
+        My orders
+      </a>
+    </div>
+    <div class="user-orders">
+      <a routerLink="/admin">
+        <span class="material-symbols-outlined">shield_person</span>
+        Panel
+      </a>
+    </div>
   </nav>
 </header>

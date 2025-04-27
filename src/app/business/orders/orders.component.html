@@ -1,0 +1,127 @@
+<div class="checkout-container" *ngIf="products && products.length > 0">
+    <div class="checkout-header">
+      <h2>Finalizar Compra</h2>
+      <div class="checkout-steps">
+        <div class="step completed">Carrito</div>
+        <div class="step-divider"></div>
+        <div class="step active">Pago</div>
+        <div class="step-divider"></div>
+        <div class="step">Confirmación</div>
+      </div>
+    </div>
+  
+    <div class="checkout-content">
+      <div class="checkout-details">
+        <div class="section shipping-section">
+          <h3>Método de Envío</h3>
+          <div class="shipping-options">
+            <div class="form-group">
+              <label for="shipping-method">Selecciona un método de envío:</label>
+              <select 
+                id="shipping-method" 
+                class="shipping-select" 
+                [(ngModel)]="selectedShippingMethod"
+                (change)="updateTotals()">
+                <option [ngValue]="null" disabled>Seleccionar método de envío</option>
+                <option *ngFor="let method of shippingMethods" [ngValue]="method">
+                  {{ method.name }} - ${{ method.cost }} ({{ formatEstimatedTime(method.estimated_time) }})
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div class="section payment-section">
+          <h3>Información de Pago</h3>
+          <div class="payment-form">
+            <!-- Stripe Elements Container -->
+            <div class="form-group">
+              <label for="card-element">Tarjeta de Crédito o Débito</label>
+              <div id="card-element" class="stripe-element">
+                <!-- Stripe Elements se montará aquí -->
+              </div>
+              <div id="card-errors" class="error-message" role="alert"></div>
+            </div>
+  
+            <div class="form-group">
+              <label for="name">Nombre en la tarjeta</label>
+              <input type="text" id="name" class="form-input" [(ngModel)]="cardholderName" placeholder="Como aparece en la tarjeta">
+            </div>
+  
+            <div class="save-card-option">
+              <input type="checkbox" id="save-card" [(ngModel)]="saveCard">
+              <label for="save-card">Guardar esta tarjeta para futuras compras</label>
+            </div>
+          </div>
+        </div>
+  
+        <div class="section order-items">
+          <h3>Resumen de Productos</h3>
+          <div class="order-item" *ngFor="let product of products">
+            <div class="item-image">
+              <img [src]="product.photo" alt="{{ product.name }}">
+            </div>
+            <div class="item-details">
+              <h4>{{ product.name }}</h4>
+              <div class="item-meta">
+                <span class="quantity">Cantidad: {{ product.quantity }}</span>
+                <span class="price">${{ getPrice(product) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="checkout-summary">
+        <h3>Resumen de Compra</h3>
+        
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${{ calculateSubtotal().toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-row">
+          <span>Impuestos</span>
+          <span>${{ calculateTaxes().toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-row shipping">
+          <span>Envío</span>
+          <span *ngIf="selectedShippingMethod">${{ selectedShippingMethod.cost }}</span>
+          <span *ngIf="!selectedShippingMethod">Selecciona un método</span>
+        </div>
+        
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>${{ calculateTotal().toFixed(2) }}</span>
+        </div>
+        
+        <button 
+          class="pay-btn" 
+          [disabled]="!selectedShippingMethod || isProcessing" 
+          (click)="processPayment()">
+          <span *ngIf="!isProcessing">Pagar ${{ calculateTotal().toFixed(2) }}</span>
+          <span *ngIf="isProcessing">Procesando...</span>
+        </button>
+        
+        <button class="back-btn" routerLink="/cart" [disabled]="isProcessing">
+          Volver al carrito
+        </button>
+  
+        <div class="secure-payment">
+          <span class="material-icons">lock</span>
+          <span>Pago seguro con Stripe</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="checkout-container empty-checkout" *ngIf="!products || products.length === 0">
+    <div class="empty-checkout-content">
+      <h2>No hay productos para procesar</h2>
+      <p>Tu carrito está vacío. Agrega productos antes de proceder al pago.</p>
+      <button class="continue-shopping-btn" routerLink="/products">
+        Explorar productos
+      </button>
+    </div>
+  </div>

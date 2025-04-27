@@ -1,9 +1,8 @@
 <section class="featured-products">
   <div class="products-grid">
-    <div class="product-card" *ngFor="let product of featuredProducts">
-      <span class="material-symbols-outlined">deployed_code</span>
-      <h3>{{ product.name }}</h3>
-      <p class="price">{{ product.price | currency:'USD' }}</p>
-    </div>
+    <app-product-card
+      *ngFor="let product of featuredProducts"
+      [product]="product"
+    ></app-product-card>
   </div>
 </section>

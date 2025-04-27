@@ -18,8 +18,8 @@ body {
   margin: 0;
 }
 button {
-  background-color: var(--secondary-color);
-  color: var(--quaternary-color);
+  background-color: var(--six-color);
+  color: var(--primary-color);
   border-radius: 5px;
   border: none;
   padding: 10px 20px;
@@ -30,8 +30,8 @@ button {
 }
 
 button:hover {
-  background-color: var(--tertiary-color);
-  color: var(--secondary-color);
+  background-color: var(--quaternary-color);
+  color: var(--primary-color);
 }
 button:active {
   background-color: var(--quaternary-color);
@@ -74,8 +74,6 @@ input:focus {
 input::placeholder {
   color: var(--quaternary-color);
 }
-.input-container {
-}
 
 h1,
 h2,
@@ -109,10 +107,7 @@ main {
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24;
-  font-size: 80px;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-size: 40px;
+  color: black;
 }

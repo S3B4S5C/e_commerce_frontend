@@ -1,12 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Globals } from '../constants/globals';
-import { tap } from 'rxjs';
+import { getHeaders } from '../../shared/utils/requests';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private PRODUCTS_URL = `${Globals.API_URL}/products/randomproducts`;
+  private PRODUCTS_URL = `${Globals.API_URL}/products`;
   private CATEGORIES_URL = `${Globals.API_URL}/products/categories`;
 
   constructor(private httpClient: HttpClient) {}
@@ -18,9 +19,35 @@ export class ProductsService {
   getCategories(): any {
     return this.httpClient.get(this.CATEGORIES_URL);
   }
-  
+
   getRecommendedProducts(): any {
-    return this.httpClient.get(`${Globals.API_URL}/products/recommended`);
+    return this.httpClient.get(`${this.PRODUCTS_URL}/recommended`);
   }
-  
+
+  searchProducts(query: string): any {
+    return this.httpClient.get(`${this.PRODUCTS_URL}/searchProducts`, {
+      params: { q: query },
+    });
+  }
+
+  getProductById(id: string): any {
+    return this.httpClient.get(`${this.PRODUCTS_URL}/getProduct/${id}`);
+  }
+
+  getRecommendedCartProducts(product_id: string): any {
+    return this.httpClient.get(
+      `${this.PRODUCTS_URL}/recommended_cart/${product_id}`,
+      { headers: getHeaders() }
+    );
+  }
+
+  updateProduct(product: any): any {
+    return this.httpClient.put(
+      `${this.PRODUCTS_URL}/updateProduct`,
+      { product },
+      {
+        headers: getHeaders(),
+      }
+    );
+  }
 }

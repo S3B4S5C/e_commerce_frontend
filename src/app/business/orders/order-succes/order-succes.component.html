@@ -1,0 +1,32 @@
+<div class="success-container">
+    <div class="success-card">
+      <div class="success-icon">
+        <span class="material-symbols-outlined">check_circle</span>
+      </div>
+      
+      <h1>¡Compra Exitosa!</h1>
+      <p class="success-message">Tu pedido ha sido procesado correctamente</p>
+      
+      <div class="order-number">
+        <span>Número de pedido:</span>
+        <strong>{{ orderId }}</strong>
+      </div>
+      
+      <div class="success-actions">
+        <button class="continue-shopping-btn" routerLink="/products">
+          Continuar comprando
+        </button>
+        
+        <a class="view-orders-link" routerLink="/orders">
+          Ver mis pedidos
+        </a>
+      </div>
+      
+      <div class="confirmation-email">
+        <span class="material-symbols-outlined">
+          mail
+          </span>
+        <p>Hemos enviado los detalles a tu correo electrónico</p>
+      </div>
+    </div>
+  </div>

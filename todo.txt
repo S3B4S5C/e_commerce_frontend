@@ -1,0 +1,3 @@
+Incrementar y decrementar en el carrito
+Buscar categorias
+Filtros (Tal vez no hacer)

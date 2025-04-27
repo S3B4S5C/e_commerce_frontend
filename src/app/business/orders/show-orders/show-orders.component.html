@@ -1,0 +1,98 @@
+<div class="orders-container">
+    <div class="orders-header">
+      <h1>Mis Pedidos</h1>
+      <div class="orders-filters">
+        <div class="search-container">
+          <input 
+            type="text" 
+            placeholder="Buscar pedido..." 
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="filterOrders()">
+          <span class="material-icons search-icon">search</span>
+        </div>
+        
+        <select class="filter-select" [(ngModel)]="paymentStateFilter" (change)="filterOrders()">
+          <option value="all">Todos los estados</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="completado">Completado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+    </div>
+  
+    <div class="orders-content" *ngIf="filteredOrders.length > 0">
+      <div class="order-card" *ngFor="let order of filteredOrders">
+        <div class="order-header">
+          <div class="order-id">
+            <span class="label">Pedido:</span>
+            <span class="value">{{ generateOrderId(order) }}</span>
+          </div>
+          <div class="order-date">
+            <span class="material-icons">event</span>
+            <span>{{ order.date }} {{ order.time.substring(0, 8) }}</span>
+          </div>
+        </div>
+        
+        <div class="order-status-row">
+          <div class="order-status" [ngClass]="getStatusClass(order.payment_detail.state)">
+            {{ getStatusLabel(order.payment_detail.state) }}
+          </div>
+          <div class="order-total">
+            <span class="label">Total:</span>
+            <span class="value">${{ order.total_price }}</span>
+          </div>
+        </div>
+        
+        <div class="order-products">
+          <div class="product-item" *ngFor="let item of order.items; let i = index">
+            <div class="product-image">
+              <img [src]="getProductImage(i)" alt="Producto {{ i + 1 }}">
+            </div>
+            <div class="product-details">
+              <div class="product-name">Producto {{ i + 1 }}</div>
+              <div class="product-meta">
+                <span class="quantity">{{ item.quantity }}x</span>
+                <span class="price">${{ calculateItemPrice(order, i) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="order-footer">
+          <div class="shipping-info">
+            <span class="material-icons">local_shipping</span>
+            <span>{{ getShippingMethodName(order.shipping_method) }}</span>
+          </div>
+          
+          <div class="payment-info">
+            <span class="material-icons">payment</span>
+            <span>{{ order.payment_detail.provider | titlecase }}</span>
+          </div>
+          
+          <div class="order-actions">
+            <button class="details-btn" [routerLink]="['/orders', generateOrderId(order)]">
+              Ver detalles
+            </button>
+            
+            <button class="pay-btn" *ngIf="order.payment_detail.state === 'pendiente'">
+              <span class="material-icons">credit_card</span>
+              Pagar ahora
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="empty-orders" *ngIf="filteredOrders.length === 0">
+      <div class="empty-icon">
+        <span class="material-icons">shopping_bag</span>
+      </div>
+      <h2>No se encontraron pedidos</h2>
+      <p *ngIf="orders.length === 0">Aún no has realizado ninguna compra</p>
+      <p *ngIf="orders.length > 0">No hay resultados para tu búsqueda</p>
+      <button class="shop-now-btn" routerLink="/products">
+        Explorar productos
+      </button>
+    </div>
+  </div>

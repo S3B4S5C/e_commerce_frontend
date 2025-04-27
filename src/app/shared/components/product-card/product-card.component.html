@@ -1,0 +1,6 @@
+<div (click)="showDetails()" class="product-card">
+  <img [src]="getProductImage(product.category)" [alt]="product.name" />
+  <h3>{{ product.name }}</h3>
+  <p class="price">{{ product.price | currency : "USD" }}</p>
+</div>
+

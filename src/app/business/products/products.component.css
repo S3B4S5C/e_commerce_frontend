@@ -1,0 +1,71 @@
+.products-page {
+    display: flex;
+    gap: 40px;
+    margin: 20px;
+    
+}
+
+/* Sidebar */
+.filters-sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filter-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    user-select: none;
+    gap: 10px;
+}
+
+.filter-option input[type="checkbox"] {
+    display: none;
+}
+
+.filter-option .check::before {
+    content: "check_box_outline_blank";
+}
+
+.filter-option input[type="checkbox"]:checked + .check::before {
+    content: "check_box";
+}
+
+/* Products */
+.products-container {
+    flex-grow: 1;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .pagination-controls button.active {
+    background-color: var(--primary-color);
+    color: var(--six-color);
+  }
+  

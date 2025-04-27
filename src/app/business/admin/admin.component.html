@@ -1,0 +1,605 @@
+<div class="admin-container">
+  <!-- Navegación por tabs en lugar de sidebar -->
+  <div class="admin-tabs">
+    <div class="tab" [class.active]="activeSection === 'dashboard'" (click)="setActiveSection('dashboard')">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Dashboard</span>
+    </div>
+    <div class="tab" [class.active]="activeSection === 'products'" (click)="setActiveSection('products')">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span>Productos</span>
+    </div>
+    <div class="tab" [class.active]="activeSection === 'categories'" (click)="setActiveSection('categories')">
+      <span class="material-symbols-outlined">category</span>
+      <span>Categorías</span>
+    </div>
+    <div class="tab" [class.active]="activeSection === 'tags'" (click)="setActiveSection('tags')">
+      <span class="material-symbols-outlined">sell</span>
+      <span>Tags</span>
+    </div>
+    <div class="tab" [class.active]="activeSection === 'activity'" (click)="setActiveSection('activity')">
+      <span class="material-symbols-outlined">history</span>
+      <span>Activity Log</span>
+    </div>
+  </div>
+  
+  <!-- Contenido principal -->
+  <div class="admin-content">
+    <div class="content-header">
+      <div class="header-title">
+        <h1>{{ getSectionTitle() }}</h1>
+      </div>
+      <div class="header-actions">
+        <div class="search-container">
+          <input type="text" placeholder="Buscar..." class="search-input">
+        </div>
+        <div class="notifications">
+          <span class="material-symbols-outlined">notifications</span>
+          <span class="notification-badge">3</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Dashboard -->
+    <div class="content-body" *ngIf="activeSection === 'dashboard'">
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: rgba(var(--primary-color-rgb), 0.1);">
+            <span class="material-symbols-outlined" style="color: var(--primary-color);">inventory_2</span>
+          </div>
+          <div class="stat-info">
+            <h3>{{ totalProducts }}</h3>
+            <p>Productos</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: rgba(var(--six-color-rgb), 0.1);">
+            <span class="material-symbols-outlined" style="color: var(--six-color);">warning</span>
+          </div>
+          <div class="stat-info">
+            <h3>{{ outOfStockProducts }}</h3>
+            <p>Sin stock</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: rgba(52, 168, 83, 0.1);">
+            <span class="material-symbols-outlined" style="color: #34A853;">category</span>
+          </div>
+          <div class="stat-info">
+            <h3>{{ totalCategories }}</h3>
+            <p>Categorías</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: rgba(251, 188, 4, 0.1);">
+            <span class="material-symbols-outlined" style="color: #FBBC04;">sell</span>
+          </div>
+          <div class="stat-info">
+            <h3>{{ totalTags }}</h3>
+            <p>Tags</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="dashboard-sections">
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h2>Productos sin stock</h2>
+            <button class="view-all-btn" (click)="setActiveSection('products')">Ver todos</button>
+          </div>
+          
+          <div class="product-list">
+            <div class="product-item" *ngFor="let product of outOfStockProductsList">
+              <div class="product-image">
+                <img [src]="product.photo" alt="{{ product.name }}">
+              </div>
+              <div class="product-details">
+                <h3>{{ product.name }}</h3>
+                <p class="product-category">{{ product.category }}</p>
+                <div class="product-stock">
+                  <span class="stock-label out-of-stock">Sin stock</span>
+                  <button class="add-stock-btn" (click)="openAddStockModal(product)">
+                    <span class="material-symbols-outlined">add</span>
+                    Añadir stock
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="empty-list" *ngIf="outOfStockProductsList.length === 0">
+              <span class="material-symbols-outlined">inventory_2</span>
+              <p>No hay productos sin stock</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h2>Actividad reciente</h2>
+            <button class="view-all-btn" (click)="setActiveSection('activity')">Ver todo</button>
+          </div>
+          
+          <div class="activity-list">
+            <div class="activity-item" *ngFor="let activity of recentActivities">
+              <div class="activity-icon" [ngClass]="getActivityIconClass(activity.type)">
+                <span class="material-symbols-outlined">{{ getActivityIcon(activity.type) }}</span>
+              </div>
+              <div class="activity-details">
+                <p class="activity-text">{{ activity.description }}</p>
+                <p class="activity-time">{{ activity.time | date:'dd/MM/yyyy HH:mm' }}</p>
+              </div>
+            </div>
+            
+            <div class="empty-list" *ngIf="recentActivities.length === 0">
+              <span class="material-symbols-outlined">history</span>
+              <p>No hay actividad reciente</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Productos -->
+    <div class="content-body" *ngIf="activeSection === 'products'">
+      <div class="section-actions">
+        <div class="filter-container">
+          <select class="filter-select">
+            <option value="all">Todos los productos</option>
+            <option value="in-stock">Con stock</option>
+            <option value="out-of-stock">Sin stock</option>
+          </select>
+          
+          <select class="filter-select">
+            <option value="all">Todas las categorías</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+        
+        <button class="add-btn" (click)="openAddProductModal()">
+          <span class="material-symbols-outlined">add</span>
+          Nuevo producto
+        </button>
+      </div>
+      
+      <div class="products-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Tags</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products">
+              <td class="product-cell">
+                <div class="product-info">
+                  <div class="product-image">
+                    <img [src]="product.photo" alt="{{ product.name }}">
+                  </div>
+                  <div>
+                    <p class="product-name">{{ product.name }}</p>
+                    <p class="product-id">ID: {{ product.id }}</p>
+                  </div>
+                </div>
+              </td>
+              <td>{{ product.category }}</td>
+              <td>${{ product.price }}</td>
+              <td>
+                <div class="stock-info">
+                  <span [class.out-of-stock]="product.stock === 0">{{ product.stock }}</span>
+                  <button class="icon-btn" (click)="openAddStockModal(product)" title="Añadir stock">
+                    <span class="material-symbols-outlined">add_circle_outline</span>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="tags-container">
+                  <span class="tag" *ngFor="let tag of product.tags">{{ tag }}</span>
+                  <button class="icon-btn" (click)="openAddTagToProductModal(product)" title="Añadir tag">
+                    <span class="material-symbols-outlined">add_circle_outline</span>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="icon-btn" (click)="editProduct(product)" title="Editar">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                  <button class="icon-btn delete" (click)="deleteProduct(product)" title="Eliminar">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="empty-list" *ngIf="products.length === 0">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <p>No hay productos disponibles</p>
+          <button class="add-btn" (click)="openAddProductModal()">
+            <span class="material-symbols-outlined">add</span>
+            Añadir producto
+          </button>
+        </div>
+      </div>
+      
+      <div class="pagination">
+        <button class="pagination-btn" [disabled]="currentPage === 1">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <span class="pagination-info">Página {{ currentPage }} de {{ totalPages }}</span>
+        <button class="pagination-btn" [disabled]="currentPage === totalPages">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Categorías -->
+    <div class="content-body" *ngIf="activeSection === 'categories'">
+      <div class="section-actions">
+        <button class="add-btn" (click)="openAddCategoryModal()">
+          <span class="material-symbols-outlined">add</span>
+          Nueva categoría
+        </button>
+      </div>
+      
+      <div class="categories-grid">
+        <div class="category-card" *ngFor="let category of categories">
+          <div class="category-header">
+            <h3>{{ category.name }}</h3>
+            <div class="category-actions">
+              <button class="icon-btn" (click)="editCategory(category)" title="Editar">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+              <button class="icon-btn delete" (click)="deleteCategory(category)" title="Eliminar">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="category-stats">
+            <div class="stat">
+              <span class="stat-value">{{ category.productCount }}</span>
+              <span class="stat-label">Productos</span>
+            </div>
+          </div>
+          
+          <div class="category-description">
+            <p>{{ category.description }}</p>
+          </div>
+        </div>
+        
+        <div class="add-category-card" (click)="openAddCategoryModal()">
+          <span class="material-symbols-outlined">add_circle</span>
+          <p>Añadir categoría</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tags -->
+    <div class="content-body" *ngIf="activeSection === 'tags'">
+      <div class="section-actions">
+        <div class="search-container">
+          <input type="text" placeholder="Buscar tag..." class="search-input" [(ngModel)]="tagSearchTerm">
+          <span class="material-symbols-outlined search-icon">search</span>
+        </div>
+        
+        <button class="add-btn" (click)="openAddTagModal()">
+          <span class="material-symbols-outlined">add</span>
+          Nuevo tag
+        </button>
+      </div>
+      
+      <div class="tags-grid">
+        <div class="tag-card" *ngFor="let tag of filteredTags">
+          <div class="tag-header">
+            <span class="tag-name">{{ tag.name }}</span>
+            <div class="tag-actions">
+              <button class="icon-btn" (click)="editTag(tag)" title="Editar">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+              <button class="icon-btn delete" (click)="deleteTag(tag)" title="Eliminar">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="tag-stats">
+            <span class="tag-count">{{ tag.productCount }} productos</span>
+          </div>
+        </div>
+        
+        <div class="add-tag-card" (click)="openAddTagModal()">
+          <span class="material-symbols-outlined">add_circle</span>
+          <p>Añadir tag</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Activity Log -->
+    <div class="content-body" *ngIf="activeSection === 'activity'">
+      <div class="section-actions">
+        <div class="filter-container">
+          <select class="filter-select" [(ngModel)]="activityTypeFilter" (change)="filterActivities()">
+            <option value="all">Todos los tipos</option>
+            <option value="product">Productos</option>
+            <option value="category">Categorías</option>
+            <option value="tag">Tags</option>
+            <option value="stock">Stock</option>
+          </select>
+          
+          <div class="date-range">
+            <input type="date" class="date-input" [(ngModel)]="activityStartDate" (change)="filterActivities()">
+            <span>a</span>
+            <input type="date" class="date-input" [(ngModel)]="activityEndDate" (change)="filterActivities()">
+          </div>
+        </div>
+        
+        <button class="export-btn">
+          <span class="material-symbols-outlined">download</span>
+          Exportar
+        </button>
+      </div>
+      
+      <div class="activity-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Acción</th>
+              <th>Descripción</th>
+              <th>Usuario</th>
+              <th>Fecha y hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let activity of filteredActivities">
+              <td>
+                <div class="activity-type">
+                  <span class="activity-icon" [ngClass]="getActivityIconClass(activity.type)">
+                    <span class="material-symbols-outlined">{{ getActivityIcon(activity.type) }}</span>
+                  </span>
+                  <span>{{ getActivityTypeLabel(activity.type) }}</span>
+                </div>
+              </td>
+              <td>{{ activity.description }}</td>
+              <td>{{ activity.user }}</td>
+              <td>{{ activity.time | date:'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="empty-list" *ngIf="filteredActivities.length === 0">
+          <span class="material-symbols-outlined">history</span>
+          <p>No hay actividades que coincidan con los filtros</p>
+        </div>
+      </div>
+      
+      <div class="pagination">
+        <button class="pagination-btn" [disabled]="activityCurrentPage === 1">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <span class="pagination-info">Página {{ activityCurrentPage }} de {{ activityTotalPages }}</span>
+        <button class="pagination-btn" [disabled]="activityCurrentPage === activityTotalPages">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modales -->
+  <!-- Modal para añadir/editar producto -->
+  <div class="modal" *ngIf="showAddProductModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>{{ editingProduct ? 'Editar producto' : 'Añadir nuevo producto' }}</h2>
+        <button class="close-btn" (click)="closeModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+          <div class="form-group">
+            <label for="productName">Nombre del producto</label>
+            <input type="text" id="productName" formControlName="name" placeholder="Nombre del producto">
+            <div class="error-message" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+              El nombre del producto es obligatorio
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productPrice">Precio</label>
+              <input type="number" id="productPrice" formControlName="price" placeholder="0.00">
+              <div class="error-message" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+                El precio debe ser mayor que 0
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="productStock">Stock inicial</label>
+              <input type="number" id="productStock" formControlName="stock" placeholder="0">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="productCategory">Categoría</label>
+            <select id="productCategory" formControlName="category">
+              <option value="">Seleccionar categoría</option>
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+            </select>
+            <div class="error-message" *ngIf="productForm.get('category')?.invalid && productForm.get('category')?.touched">
+              La categoría es obligatoria
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="productDescription">Descripción</label>
+            <textarea id="productDescription" formControlName="description" rows="4" placeholder="Descripción del producto"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Tags</label>
+            <div class="tags-input">
+              <div class="selected-tags">
+                <div class="tag" *ngFor="let tag of selectedTags">
+                  {{ tag.name }}
+                  <span class="material-symbols-outlined remove-tag" (click)="removeTag(tag)">close</span>
+                </div>
+              </div>
+              <div class="tags-dropdown">
+                <input type="text" placeholder="Buscar tags..." [(ngModel)]="tagInput" [ngModelOptions]="{standalone: true}">
+                <div class="dropdown-tags" *ngIf="tagInput">
+                  <div class="dropdown-tag" *ngFor="let tag of getFilteredTagsForDropdown()" (click)="addTag(tag)">
+                    {{ tag.name }}
+                  </div>
+                  <div class="create-tag" *ngIf="tagInput && !tagExists(tagInput)" (click)="createAndAddTag(tagInput)">
+                    <span class="material-symbols-outlined">add</span>
+                    Crear "{{ tagInput }}"
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Imagen del producto</label>
+            <div class="image-upload">
+              <div class="upload-preview" *ngIf="imagePreview">
+                <img [src]="imagePreview" alt="Vista previa">
+                <button type="button" class="remove-image" (click)="removeImage()">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+              <div class="upload-area" *ngIf="!imagePreview" (click)="triggerFileInput()">
+                <span class="material-symbols-outlined">cloud_upload</span>
+                <p>Haz clic para subir una imagen</p>
+              </div>
+              <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="save-btn" [disabled]="productForm.invalid">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para añadir stock -->
+  <div class="modal" *ngIf="showAddStockModal">
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h2>Añadir stock</h2>
+        <button class="close-btn" (click)="closeModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="product-info" *ngIf="selectedProduct">
+          <div class="product-image">
+            <img [src]="selectedProduct.photo" alt="{{ selectedProduct.name }}">
+          </div>
+          <div class="product-details">
+            <h3>{{ selectedProduct.name }}</h3>
+            <p>Stock actual: <span [class.out-of-stock]="selectedProduct.stock === 0">{{ selectedProduct.stock }}</span></p>
+          </div>
+        </div>
+        
+        <form [formGroup]="stockForm" (ngSubmit)="saveStock()">
+          <div class="form-group">
+            <label for="stockQuantity">Cantidad a añadir</label>
+            <input type="number" id="stockQuantity" formControlName="quantity" placeholder="0">
+            <div class="error-message" *ngIf="stockForm.get('quantity')?.invalid && stockForm.get('quantity')?.touched">
+              La cantidad debe ser mayor que 0
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="stockNotes">Notas (opcional)</label>
+            <textarea id="stockNotes" formControlName="notes" rows="3" placeholder="Notas sobre este stock"></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="save-btn" [disabled]="stockForm.invalid">Añadir</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para añadir/editar categoría -->
+  <div class="modal" *ngIf="showAddCategoryModal">
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h2>{{ editingCategory ? 'Editar categoría' : 'Añadir nueva categoría' }}</h2>
+        <button class="close-btn" (click)="closeModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+          <div class="form-group">
+            <label for="categoryName">Nombre de la categoría</label>
+            <input type="text" id="categoryName" formControlName="name" placeholder="Nombre de la categoría">
+            <div class="error-message" *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched">
+              El nombre de la categoría es obligatorio
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="categoryDescription">Descripción</label>
+            <textarea id="categoryDescription" formControlName="description" rows="4" placeholder="Descripción de la categoría"></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="save-btn" [disabled]="categoryForm.invalid">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal para añadir/editar tag -->
+  <div class="modal" *ngIf="showAddTagModal">
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h2>{{ editingTag ? 'Editar tag' : 'Añadir nuevo tag' }}</h2>
+        <button class="close-btn" (click)="closeModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form [formGroup]="tagForm" (ngSubmit)="saveTag()">
+          <div class="form-group">
+            <label for="tagName">Nombre del tag</label>
+            <input type="text" id="tagName" formControlName="name" placeholder="Nombre del tag">
+            <div class="error-message" *ngIf="tagForm.get('name')?.invalid && tagForm.get('name')?.touched">
+              El nombre del tag es obligatorio
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="save-btn" [disabled]="tagForm.invalid">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
