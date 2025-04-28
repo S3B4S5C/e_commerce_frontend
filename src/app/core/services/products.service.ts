@@ -41,13 +41,22 @@ export class ProductsService {
     );
   }
 
+
+  // lo hice yo
   updateProduct(product: any): any {
     return this.httpClient.put(
-      `${this.PRODUCTS_URL}/updateProduct`,
-      { product },
+      `${this.PRODUCTS_URL}/update/${product.id}`, 
+      product,
       {
         headers: getHeaders(),
       }
     );
+  }
+
+
+  deleteProduct(productId: string): any {
+    return this.httpClient.delete(`${this.PRODUCTS_URL}/delete/${productId}`, {
+      headers: getHeaders(),
+    });
   }
 }
